@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphiques des Performances</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js pour les graphiques -->
+</head>
+<body>
+    <h1>Performances par Méthode</h1>
+    <div id="charts-container">
+        <!-- Les graphiques seront insérés ici -->
+    </div>
+
+    <script>
+        // Charger les données JSON
+        fetch('http://10.0.238.64:8084/method_times.json')
+          .then(response => response.json())
+          .then(data => {
+              console.log(data); // Vérifier si les données sont bien chargées
+              createCharts(data);
+          })
+          .catch(error => {
+              console.error('Erreur lors du chargement des données:', error);
+          });
+
+        // Créer un graphique pour chaque méthode
+        function createCharts(data) {
+            const container = document.getElementById('charts-container');
+
+            // Pour chaque méthode dans le JSON
+            for (const method in data) {
+                const methodData = data[method];
+
+                // Créer un canvas pour le graphique
+                const canvas = document.createElement('canvas');
+                container.appendChild(canvas);
+
+                // Créer le graphique avec Chart.js
+                new Chart(canvas, {
+                    type: 'line',
+                    data: {
+                        labels: methodData.map((_, index) => index + 1), // X : indices des tests
+                        datasets: [{
+                            label: method,
+                            data: methodData,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Test Numéro',
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Temps (secondes)',
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -31,6 +31,13 @@
     </div>
 
     <script>
+        // Vérifier si Chart.js est chargé
+        if (typeof Chart !== 'undefined') {
+            console.log('Chart.js est chargé');
+        } else {
+            console.error('Chart.js n\'est pas chargé');
+        }
+
         // On attend que le DOM soit complètement chargé avant d'exécuter notre script
         document.addEventListener('DOMContentLoaded', function() {
             // Charger les données JSON

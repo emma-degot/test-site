@@ -13,20 +13,32 @@
     </div>
 
     <script>
-        // Charger les données JSON
-        fetch('method_times.json')
-          .then(response => response.json())
-          .then(data => {
-              console.log(data); // Vérifier si les données sont bien chargées
-              createCharts(data);
-          })
-          .catch(error => {
-              console.error('Erreur lors du chargement des données:', error);
-          });
+        // On attend que le DOM soit complètement chargé avant d'exécuter notre script
+        document.addEventListener('DOMContentLoaded', function() {
+            // Charger les données JSON
+            fetch('method_times.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erreur lors du chargement du fichier JSON");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data); // Vérifier si les données sont bien chargées
+                    createCharts(data);
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des données:', error);
+                });
+        });
 
         // Créer un graphique pour chaque méthode
         function createCharts(data) {
             const container = document.getElementById('charts-container');
+            if (!container) {
+                console.error('Élément container introuvable');
+                return;
+            }
 
             // Pour chaque méthode dans le JSON
             for (const method in data) {
@@ -44,25 +56,25 @@
                         datasets: [{
                             label: method,
                             data: methodData,
-                            borderColor: 'rgb(75, 192, 192)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            fill: true,
+                            borderColor: 'rgb(75, 192, 192)', // Couleur de la ligne
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de fond
+                            fill: true, // Remplir sous la ligne
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
+                        responsive: true, // Rendre le graphique responsive
+                        maintainAspectRatio: false, // Ne pas maintenir l'aspect ratio
                         scales: {
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Test Numéro',
+                                    text: 'Test Numéro', // Titre de l'axe X
                                 }
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'Temps (secondes)',
+                                    text: 'Temps (secondes)', // Titre de l'axe Y
                                 }
                             }
                         }
@@ -73,3 +85,4 @@
     </script>
 </body>
 </html>
+

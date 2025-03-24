@@ -6,6 +6,23 @@
     <title>Graphiques des Performances</title>
     <!-- Charger Chart.js avant le contenu HTML -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #charts-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .chart-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            width: calc(33.333% - 20px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .chart-card canvas {
+            max-width: 100%;
+        }
+    </style>
 </head>
 <body>
     <h1>Performances par Méthode</h1>
@@ -45,9 +62,14 @@
             for (const method in data) {
                 const methodData = data[method];
 
+                // Créer un div pour chaque graphique
+                const chartCard = document.createElement('div');
+                chartCard.classList.add('chart-card');
+                container.appendChild(chartCard);
+
                 // Créer un canvas pour le graphique
                 const canvas = document.createElement('canvas');
-                container.appendChild(canvas);
+                chartCard.appendChild(canvas);
 
                 // Créer le graphique avec Chart.js
                 new Chart(canvas, {

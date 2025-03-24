@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graphiques des Performances</title>
-    <!-- Chargement de Chart.js avec l'attribut defer pour garantir qu'il est chargé avant l'exécution -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Performances par Méthode</h1>
     <div id="charts-container">
         <!-- Les graphiques seront insérés ici -->
     </div>
+
+    <!-- Charger Chart.js après le contenu HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         // On attend que le DOM soit complètement chargé avant d'exécuter notre script

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graphiques des Performances</title>
-    <!-- Charger Chart.js avant le contenu HTML -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Inclure Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         #charts-container {
             display: flex;
@@ -19,9 +19,6 @@
             width: calc(33.333% - 20px);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .chart-card canvas {
-            max-width: 100%;
-        }
     </style>
 </head>
 <body>
@@ -31,13 +28,6 @@
     </div>
 
     <script>
-        // Vérifier si Chart.js est chargé
-        if (typeof Chart !== 'undefined') {
-            console.log('Chart.js est chargé');
-        } else {
-            console.error('Chart.js n\'est pas chargé');
-        }
-
         // On attend que le DOM soit complètement chargé avant d'exécuter notre script
         document.addEventListener('DOMContentLoaded', function() {
             // Charger les données JSON
@@ -86,42 +76,28 @@
                 chartCard.classList.add('chart-card');
                 container.appendChild(chartCard);
 
-                // Créer un canvas pour le graphique
-                const canvas = document.createElement('canvas');
-                chartCard.appendChild(canvas);
+                // Créer un div pour le graphique Plotly
+                const plotDiv = document.createElement('div');
+                plotDiv.id = `plot-${method}`;
+                chartCard.appendChild(plotDiv);
 
-                // Créer le graphique avec Chart.js
-                new Chart(canvas, {
-                    type: 'line',
-                    data: {
-                        labels: methodData.map((_, index) => index + 1), // X : indices des tests
-                        datasets: [{
-                            label: method,
-                            data: methodData,
-                            borderColor: 'rgb(75, 192, 192)', // Couleur de la ligne
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de fond
-                            fill: true, // Remplir sous la ligne
-                        }]
-                    },
-                    options: {
-                        responsive: true, // Rendre le graphique responsive
-                        maintainAspectRatio: false, // Ne pas maintenir l'aspect ratio
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Test Numéro', // Titre de l'axe X
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Temps (secondes)', // Titre de l'axe Y
-                                }
-                            }
-                        }
-                    }
-                });
+                // Créer le graphique avec Plotly.js
+                const trace = {
+                    x: methodData.map((_, index) => index + 1), // X : indices des tests
+                    y: methodData,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    marker: { color: 'blue' },
+                    name: method
+                };
+
+                const layout = {
+                    title: `Performances pour ${method}`,
+                    xaxis: { title: 'Test Numéro' },
+                    yaxis: { title: 'Temps (secondes)' }
+                };
+
+                Plotly.newPlot(plotDiv, [trace], layout);
             }
         }
     </script>

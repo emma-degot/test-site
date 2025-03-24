@@ -58,9 +58,21 @@
                 return;
             }
 
+            // Vérifier que les données sont bien chargées et non vides
+            if (!data || Object.keys(data).length === 0) {
+                console.error('Les données sont vides ou mal formatées');
+                return;
+            }
+
             // Pour chaque méthode dans le JSON
             for (const method in data) {
                 const methodData = data[method];
+
+                // Vérifier que les données de la méthode ne sont pas vides
+                if (!methodData || methodData.length === 0) {
+                    console.warn(`Les données pour la méthode ${method} sont vides`);
+                    continue;
+                }
 
                 // Créer un div pour chaque graphique
                 const chartCard = document.createElement('div');
